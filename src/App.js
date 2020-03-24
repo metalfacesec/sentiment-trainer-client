@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
 
+const config_data = require('../config/config.json');
+
 class App extends Component {
 	constructor(props) {
 		super(props)
@@ -9,6 +11,8 @@ class App extends Component {
 		this.state = {
 			sentance: ''
 		}
+
+		this.api_url = 'http://' + config_data.server.host + ':' + config_data.server.port + '/';
 
 		this.showRandomSentace = this.showRandomSentace.bind(this);
 		this.getRandomSentance = this.getRandomSentance.bind(this);
@@ -25,21 +29,25 @@ class App extends Component {
 	}
 
 	async getRandomSentance() {
-		let response = await axios.get('http://localhost:3000/random_tweet');
+		let response = await axios.get(this.api_url + 'random_tweet');
 
 		return response.data;
 	}
+
 	clickPositive() {
-		axios.post('http://localhost:3000/rate_tweet', { positive: true, tweet: this.state.twitter_object });
+		axios.post(this.api_url + 'rate_tweet', { positive: true, tweet: this.state.twitter_object });
 		this.showRandomSentace();
 	}
+
 	clickNegative() {
-		axios.post('http://localhost:3000/rate_tweet', { positive: false, tweet: this.state.twitter_object });
+		axios.post(this.api_url + 'rate_tweet', { positive: false, tweet: this.state.twitter_object });
 		this.showRandomSentace();
 	}
+
 	clickPass() {
 		this.showRandomSentace();
 	}
+
 	render() {
 		return (
 			<div className="container" style={{marginTop: '50px', marginBottom: '50px'}}>
